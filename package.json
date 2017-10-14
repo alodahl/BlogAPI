@@ -1,0 +1,24 @@
+{
+  "name": "blogapi",
+  "version": "1.0.0",
+  "description": "\"Practice building a CRUD API blog program\"",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alodahl/BlogAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alodahl/BlogAPI/issues"
+  },
+  "homepage": "https://github.com/alodahl/BlogAPI#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "uuid": "^3.1.0"
+  }
+}
