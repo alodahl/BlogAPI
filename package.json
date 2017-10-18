@@ -4,7 +4,7 @@
   "description": "\"Practice building a CRUD API blog program\"",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./test"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,12 @@
   "homepage": "https://github.com/alodahl/BlogAPI#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chai-http": "^3.0.0",
     "express": "^4.16.2",
     "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
   }
 }
