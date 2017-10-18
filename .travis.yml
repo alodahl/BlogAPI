@@ -1,2 +1,9 @@
 language: node_js
 node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: Axzq9r66k8maIsYD5//l6+nw0lyden3FnVb21t8qRb+EpYjgXXKlSgLfZyR20ZsW9b9Dt9JuNk1OBvQs+0YBX3a4+ct6uVTSKkeme1nqnT+ud4MmhswjTC4SNEpsGX2m68fe9GHH06E9GyFDilgdItZULUdVWyZWGUB3DKahOAVwo49M+nlCKf2HNmj0i4fIjAQQcL9GDre4iLU05xMHTwd1lpHCqmijkZrAo+wFNCBPDdZ+TDdzCKWeoJxTrBHwdGiMucFerY0kuW4UYV0L2dA1+AiuUZLMWU+QYePav4qV5+s1zX6J398lzd0Mfxv2qV8AYWkktUdPPe8R8HaGd3VA0f1lDwBRsRj5Kt1riYq+1dEq23zvlPcCcfU5k9z62+ue6BLizb8g6mPE3IdFpVIYO84eDO5q9Uu1a9N/66fuxxkYIdWd7YTEXxqZEGypM17I4D+i6pIl39dr9ea4TiXn5zAdVUWRem0yG+s2FEMyPC9T6HIyaWTBY9qf183dzSl7EvY7Jzl77K3KbWmOPnf0ZkL7k+xu5GAraflMx2n/4DXtHyNRmW/Vyjsnhs2hvO+dggzS3ajN5imyonyQNnI9/NOhB/BVLAPoVa3j90pBe8C7CISTxz/qZIdQNhcPclK7Q2mkDdvN4YRjxm1tBSBCXevXohaeYUzDmoRe9QI=
+  app: desolate-sierra-91413
+  on:
+    repo: alodahl/BlogAPI
