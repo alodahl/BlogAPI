@@ -10,7 +10,7 @@ const {BlogPosts} = require('./models');
 // BlogPosts.create("On the Road", "I just started my adventure! I'm driving from San Francisco to Seattle, WA.", "Alina", "Sept 20, 2017");
 // BlogPosts.create("Oregon", "Today we saw Crater Lake!  We stayed in a cabin with a gorgeous view.  Now onto Portland.", "Alina", "Sept 22, 2017");
 
-app.get('/blog-posts', (req, res) => {
+app.get('/', (req, res) => {
     const filters = {};
     const queryableFields = ['authorName', 'title'];
     queryableFields.forEach(field => {
@@ -29,7 +29,7 @@ app.get('/blog-posts', (req, res) => {
         });
 });
 
-app.get('/blog-posts/:id', (req, res) => {
+app.get('/:id', (req, res) => {
   BlogPosts
     // this is a convenience method Mongoose provides for searching
     // by the object _id property
@@ -41,7 +41,7 @@ app.get('/blog-posts/:id', (req, res) => {
     });
 });
 
-app.post('/blog-posts', (req, res) => {
+app.post('/', (req, res) => {
 
   const requiredFields = ['title', 'author', 'content'];
   for (let i=0; i<requiredFields.length; i++) {
@@ -66,7 +66,7 @@ app.post('/blog-posts', (req, res) => {
     });
 });
 
-app.put('/blog-posts/:id', (req, res) => {
+app.put('/:id', (req, res) => {
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -95,7 +95,7 @@ app.put('/blog-posts/:id', (req, res) => {
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
-app.delete('/blog-posts/:id', (req, res) => {
+app.delete('/:id', (req, res) => {
   BlogPosts
     .findByIdAndRemove(req.params.id)
     .then(restaurant => res.status(204).end())
