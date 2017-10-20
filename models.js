@@ -1,14 +1,20 @@
 const uuid = require('uuid');
 
-// this module provides volatile storage, using a `BlogPost`
-// model. We haven't learned about databases yet, so for now
-// we're using in-memory storage. This means each time the app stops, our storage
-// gets erased.
+const mongoose = require('mongoose');
 
-// don't worry to much about how BlogPost is implemented.
-// Our concern in this example is with how the API layer
-// is implemented, and getting it to use an existing model.
+const blogPostSchema = mongoose.Schema({
+  title: {type: String, required: true},
+  author: [{
+    firstName: {type: String, required: true},
+    lastName: String
+  }],
+  content: {type: String, required: true},
+  publishDate: { type: Date, default: Date.now }
+});
 
+blogPostSchema.virtual('authorName').get(function() {
+  return `${this.author.firstName} ${this.author.lastName}`.trim()});
+// {"title": "10 things -- you won't believe #4", "author": {"firstName": "Billy", "lastName": "Smith"}, "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
 
 function StorageException(message) {
    this.message = message;
@@ -61,11 +67,21 @@ const BlogPosts = {
   }
 };
 
-function createBlogPostsModel() {
-  const storage = Object.create(BlogPosts);
-  storage.posts = [];
-  return storage;
+// function createBlogPostsModel() {
+//   const storage = Object.create(BlogPosts);
+//   storage.posts = [];
+//   return storage;
+// }
+blogPostSchema.methods.apiRepr = function() {
+
+  return {
+    id: this._id,
+    title: this.title,
+    authorName: this.authorName,
+    content: this.content,
+    publishDate: this.publishDate
+  };
 }
 
-
-module.exports = {BlogPosts: createBlogPostsModel()};
+const BlogPosts = mongoose.model('blogposts', blogPostSchema);
+module.exports = {BlogPosts}; //{BlogPosts: createBlogPostsModel()};

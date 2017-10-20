@@ -1,29 +1,37 @@
-
+const bodyParser = require('body-parser');
 const express = require('express');
+const mongoose = require('mongoose');
 
-const app = express();
+mongoose.Promise = global.Promise;
 
 const blogPostsRouter = require('./blogPostsRouter');
+const {PORT, DATABASE_URL} = require('./config');
+const {BlogPosts} = require('./models');
 
+const app = express();
+app.use(bodyParser.json());
 app.use('/blog-posts', blogPostsRouter);
 
-// app.listen(process.env.PORT || 8080, () => {
-//   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
-// });
 
 let server;
-
-// this function starts our server and returns a Promise.
+// this function connects to our database, then starts our server and returns a Promise.
 // In our test code, we need a way of asynchronously starting
 // our server, since we'll be dealing with promises there.
-function runServer() {
-  const port = process.env.PORT || 8080;
+function runServer(databaseUrl=DATABASE_URL, port=PORT) {
+
   return new Promise((resolve, reject) => {
-    server = app.listen(port, () => {
-      console.log(`Your app is listening on port ${port}`);
-      resolve(server);
-    }).on('error', err => {
-      reject(err)
+    mongoose.connect(databaseUrl, err => {
+      if (err) {
+        return reject(err);
+      }
+      server = app.listen(port, () => {
+        console.log(`Your app is listening on port ${port}`);
+        resolve();
+      })
+      .on('error', err => {
+        mongoose.disconnect();
+        reject(err);
+      });
     });
   });
 }
@@ -32,18 +40,21 @@ function runServer() {
 // `server.close` does not return a promise on its own, so we manually
 // create one.
 function closeServer() {
-  return new Promise((resolve, reject) => {
-    console.log('Closing server');
-    server.close(err => {
-      if (err) {
-        reject(err);
-        // so we don't also call `resolve()`
-        return;
-      }
-      resolve();
-    });
+  return mongoose.disconnect().then(() => {
+     return new Promise((resolve, reject) => {
+       console.log('Closing server');
+       server.close(err => {
+           if (err) {
+               return reject(err);
+           }
+           resolve();
+       });
+     });
   });
 }
+// app.listen(process.env.PORT || 8080, () => {
+//   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
+// });      //the next if statement makes the above code unnecessary?
 
 // if server.js is called directly (aka, with `node server.js`), this block
 // runs. but we also export the runServer command so other code (for instance, test code) can start the server as needed.
