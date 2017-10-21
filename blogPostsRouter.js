@@ -11,13 +11,6 @@ const {BlogPosts} = require('./models');
 // BlogPosts.create("Oregon", "Today we saw Crater Lake!  We stayed in a cabin with a gorgeous view.  Now onto Portland.", "Alina", "Sept 22, 2017");
 
 app.get('/', (req, res) => {
-    const filters = {};
-    const queryableFields = ['authorName', 'title'];
-    queryableFields.forEach(field => {
-        if (req.query[field]) {
-            filters[field] = req.query[field];
-        }
-    });
     BlogPosts
         .find(filters)
         .then(BlogPosts => res.json(
@@ -98,8 +91,11 @@ app.put('/:id', (req, res) => {
 app.delete('/:id', (req, res) => {
   BlogPosts
     .findByIdAndRemove(req.params.id)
-    .then(restaurant => res.status(204).end())
-    .catch(err => res.status(500).json({message: 'Internal server error'}));
+    .then(() => { res.status(204).json({message: 'success'});})
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error'})
+    });
 });
 
 // catch-all endpoint if client makes request to non-existent endpoint

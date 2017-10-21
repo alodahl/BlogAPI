@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 const blogPostSchema = mongoose.Schema({
   title: {type: String, required: true},
   author: [{
-    firstName: {type: String, required: true},
-    lastName: String
+    firstName: {type: String},
+    lastName: {type: String}
   }],
-  content: {type: String, required: true},
-  publishDate: { type: Date, default: Date.now()}
+  content: {type: String},
+  publishDate: { type: Date, default: Date.now}
 });
 
 blogPostSchema.virtual('authorName').get(function() {
@@ -77,9 +77,9 @@ blogPostSchema.methods.apiRepr = function() {
   return {
     id: this._id, //Mongoose assigns each of your schemas an id virtual getter by default which returns the documents _id field cast to a string
     title: this.title,
-    authorName: this.authorName,
+    author: this.authorName,
     content: this.content,
-    publishDate: this.publishDate
+    created: this.publishDate
   };
 }
 
