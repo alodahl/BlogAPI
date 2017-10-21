@@ -10,21 +10,21 @@ const {BlogPosts} = require('./models');
 
 const app = express();
 app.use(bodyParser.json());
-app.use('/blog-posts', blogPostsRouter);
+app.use('/posts', blogPostsRouter);
 
 
 let server;
+
 // this function connects to our database, then starts our server and returns a Promise.
 // In our test code, we need a way of asynchronously starting
 // our server, since we'll be dealing with promises there.
 function runServer(databaseUrl=DATABASE_URL, port=PORT) {
 
   return new Promise((resolve, reject) => {
-    mongoose.connect(databaseUrl, err => {
+    mongoose.connect(databaseUrl, {useMongoClient: true}, err => {
       if (err) {
         return reject(err);
       }
-      useMongoClient: true,
       server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();

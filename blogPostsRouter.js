@@ -3,16 +3,15 @@ const router = express.Router();
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-const app = express();
 
 const {BlogPosts} = require('./models');
 
 // BlogPosts.create("On the Road", "I just started my adventure! I'm driving from San Francisco to Seattle, WA.", "Alina", "Sept 20, 2017");
 // BlogPosts.create("Oregon", "Today we saw Crater Lake!  We stayed in a cabin with a gorgeous view.  Now onto Portland.", "Alina", "Sept 22, 2017");
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     BlogPosts
-        .find(filters)
+        .find({})
         .then(BlogPosts => res.json(
             BlogPosts.map(blogpost => blogpost.apiRepr())
         ))
@@ -22,7 +21,7 @@ app.get('/', (req, res) => {
         });
 });
 
-app.get('/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   BlogPosts
     // this is a convenience method Mongoose provides for searching
     // by the object _id property
@@ -34,7 +33,7 @@ app.get('/:id', (req, res) => {
     });
 });
 
-app.post('/', (req, res) => {
+router.post('/', (req, res) => {
 
   const requiredFields = ['title', 'author', 'content'];
   for (let i=0; i<requiredFields.length; i++) {
@@ -59,7 +58,7 @@ app.post('/', (req, res) => {
     });
 });
 
-app.put('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -88,7 +87,7 @@ app.put('/:id', (req, res) => {
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
-app.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   BlogPosts
     .findByIdAndRemove(req.params.id)
     .then(() => { res.status(204).json({message: 'success'});})
@@ -99,7 +98,7 @@ app.delete('/:id', (req, res) => {
 });
 
 // catch-all endpoint if client makes request to non-existent endpoint
-app.use('*', function(req, res) {
+router.use('*', function(req, res) {
   res.status(404).json({message: 'Not Found'});
 });
 // router.get('/', (req, res)  => {
