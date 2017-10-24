@@ -79,7 +79,7 @@ blogPostSchema.methods.apiRepr = function() {
     title: this.title,
     author: this.authorName,
     content: this.content,
-    created: this.publishDate
+    publishDate: this.publishDate
   };
 }
 

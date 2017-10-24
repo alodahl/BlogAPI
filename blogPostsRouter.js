@@ -48,7 +48,10 @@ router.post('/', (req, res) => {
   BlogPosts
     .create({
       title: req.body.title,
-      author: req.body.author,
+      author: {
+        firstName: req.body.author.firstName,
+        lastName: req.body.author.lastName
+      },
       content: req.body.content})
     .then(
       blogpost => res.status(201).json(blogpost.apiRepr()))

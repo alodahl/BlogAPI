@@ -20,7 +20,7 @@ describe('BlogPosts', function() {
   //GET blog posts, then make sure they are json objects with the right keys
   it('should list blog-posts on GET', function() {
     return chai.request(app)
-      .get('/blog-posts')
+      .get('/posts')
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
@@ -40,11 +40,14 @@ describe('BlogPosts', function() {
       const newPost = {
         title: "Home Again",
         content: "Today we finally finished our adventure.",
-        author: "Alina",
+        author: {
+          firstName: "Alina",
+          lastName: "Christine"
+        },
         publishDate: "Oct 2017"
       };
       return chai.request(app)
-        .post('/blog-posts')
+        .post('/posts')
         .send(newPost)
         .then(function(res) {
           res.should.have.status(201);
@@ -52,9 +55,9 @@ describe('BlogPosts', function() {
           res.body.should.be.a('object');
           res.body.should.include.keys('title', 'content', 'id', 'author', 'publishDate');
           res.body.id.should.not.be.null;
-          // response should be deep equal to `newItem` from above if we assign
-          // `id` to it from `res.body.id`
-          res.body.should.deep.equal(Object.assign(newPost, {id: res.body.id}));
+          res.body.title.should.equal(newPost.title);
+          res.body.content.should.equal(newPost.content);
+          res.body.author.should.equal(newPost.author.firstName+" "+newPost.author.lastName);
         });
     });
     //GET blog-posts and update whichever post is first (can make a find function later)
@@ -68,11 +71,11 @@ describe('BlogPosts', function() {
       };
 
       return chai.request(app)
-        .get('/blog-posts')
+        .get('/posts')
         .then(function(res) {
           updateData.id = res.body[0].id;
           return chai.request(app)
-            .put(`/blog-posts/${updateData.id}`)
+            .put(`/posts/${updateData.id}`)
             .send(updateData);
         })
         .then(function(res) {
@@ -82,10 +85,10 @@ describe('BlogPosts', function() {
     //GET blog-posts and delete whichever is first (can make a find function later)
     it('should delete blog post on DELETE', function() {
       return chai.request(app)
-      .get('/blog-posts')
+      .get('/posts')
       .then(function(res) {
         return chai.request(app)
-          .delete(`/blog-posts/${res.body[0].id}`);
+          .delete(`/posts/${res.body[0].id}`);
       })
       .then(function(res) {
         res.should.have.status(204);
